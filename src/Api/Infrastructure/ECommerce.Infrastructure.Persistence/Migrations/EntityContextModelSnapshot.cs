@@ -22,39 +22,10 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ECommerce.Api.Domain.Models.Basket", b =>
+            modelBuilder.Entity("ECommerce.Api.Domain.Models.CartItem", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsOrdered")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("float");
-
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("basket", "dbo");
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Domain.Models.BasketProduct", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BasketID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateDate")
@@ -64,19 +35,19 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("ProductID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("ProductPrice")
-                        .HasColumnType("float");
-
-                    b.Property<int>("ProductQuantity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("ShoppingCartID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("BasketID");
-
                     b.HasIndex("ProductID");
 
-                    b.ToTable("basketproduct", "dbo");
+                    b.HasIndex("ShoppingCartID");
+
+                    b.ToTable("cartitem", "dbo");
                 });
 
             modelBuilder.Entity("ECommerce.Api.Domain.Models.Order", b =>
@@ -85,22 +56,14 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BasketID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("OrderStatus")
-                        .HasColumnType("bit");
 
                     b.Property<Guid>("UserID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("BasketID");
 
                     b.HasIndex("UserID");
 
@@ -129,6 +92,9 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -150,6 +116,27 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("product", "dbo");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Domain.Models.ShoppingCart", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("UserID")
+                        .IsUnique();
+
+                    b.ToTable("shoppingcart", "dbo");
                 });
 
             modelBuilder.Entity("ECommerce.Api.Domain.Models.User", b =>
@@ -194,72 +181,74 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.ToTable("user", "dbo");
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Domain.Models.Basket", b =>
+            modelBuilder.Entity("ECommerce.Api.Domain.Models.CartItem", b =>
                 {
-                    b.HasOne("ECommerce.Api.Domain.Models.User", "User")
-                        .WithMany("Baskets")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ECommerce.Api.Domain.Models.BasketProduct", b =>
-                {
-                    b.HasOne("ECommerce.Api.Domain.Models.Basket", "Basket")
-                        .WithMany("BasketProducts")
-                        .HasForeignKey("BasketID")
+                    b.HasOne("ECommerce.Api.Domain.Models.Order", null)
+                        .WithMany("CartItems")
+                        .HasForeignKey("ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ECommerce.Api.Domain.Models.Product", "Product")
-                        .WithMany("BasketProducts")
+                        .WithMany("CartItems")
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Basket");
+                    b.HasOne("ECommerce.Api.Domain.Models.ShoppingCart", "ShoppingCart")
+                        .WithMany("CartItems")
+                        .HasForeignKey("ShoppingCartID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("ECommerce.Api.Domain.Models.Order", b =>
                 {
-                    b.HasOne("ECommerce.Api.Domain.Models.Basket", "Basket")
-                        .WithMany("Orders")
-                        .HasForeignKey("BasketID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ECommerce.Api.Domain.Models.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Basket");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Domain.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("ECommerce.Api.Domain.Models.User", "User")
+                        .WithOne("ShoppingCart")
+                        .HasForeignKey("ECommerce.Api.Domain.Models.ShoppingCart", "UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ECommerce.Api.Domain.Models.Basket", b =>
+            modelBuilder.Entity("ECommerce.Api.Domain.Models.Order", b =>
                 {
-                    b.Navigation("BasketProducts");
-
-                    b.Navigation("Orders");
+                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("ECommerce.Api.Domain.Models.Product", b =>
                 {
-                    b.Navigation("BasketProducts");
+                    b.Navigation("CartItems");
+                });
+
+            modelBuilder.Entity("ECommerce.Api.Domain.Models.ShoppingCart", b =>
+                {
+                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("ECommerce.Api.Domain.Models.User", b =>
                 {
-                    b.Navigation("Baskets");
-
                     b.Navigation("Orders");
+
+                    b.Navigation("ShoppingCart")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -2,6 +2,7 @@
 using ECommerce.Api.Application.Interfaces.Repostrories;
 using ECommerce.Infrastructure.Persistence.Context;
 using ECommerce.Infrastructure.Persistence.Repository;
+using ECommerce.Infrastructure.Persistence.Repostory;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,8 @@ public static class Registration
         //SeedData.SeedAsync(configuration).GetAwaiter().GetResult();
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+		services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
 
         return services;
 	}

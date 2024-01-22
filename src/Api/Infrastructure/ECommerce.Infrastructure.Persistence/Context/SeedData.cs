@@ -43,7 +43,7 @@ internal class SeedData
             await context.Users.AddRangeAsync(users);
 
             await context.SaveChangesAsync();
-            var result = new Faker<Product>(locale: "tr")
+            var product = new Faker<Product>(locale: "tr")
                .RuleFor(i => i.ID, i => Guid.NewGuid())
                .RuleFor(i => i.CreateDate, i => i.Date.Between(DateTime.Now.AddDays(-100), DateTime.Now))
                .RuleFor(i => i.Company, i => i.Company.CompanyName())
@@ -54,8 +54,9 @@ internal class SeedData
                .RuleFor(i => i.Stock, i => i.Commerce.Random.Int(1,100))
                .RuleFor(i => i.Barcode, i => i.Commerce.Ean13())
                .RuleFor(i => i.Size, i => i.PickRandom(Size))
+               .RuleFor(i => i.IsActive, i => i.Random.Bool())
                .Generate(500);
-
+            await context.Products.AddRangeAsync(product);
 
             await context.SaveChangesAsync();
         }

@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\ECommerce.Api.Application\ECommerce.Api.Application.csproj" />
     <ProjectReference Include="..\..\Infrastructure\ECommerce.Infrastructure.Persistence\ECommerce.Infrastructure.Persistence.csproj" />
   </ItemGroup>

@@ -28,6 +28,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     Barcode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Stock = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -56,80 +57,17 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "basket",
-                schema: "dbo",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TotalPrice = table.Column<double>(type: "float", nullable: false),
-                    IsOrdered = table.Column<bool>(type: "bit", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_basket", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_basket_user_UserID",
-                        column: x => x.UserID,
-                        principalSchema: "dbo",
-                        principalTable: "user",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "basketproduct",
-                schema: "dbo",
-                columns: table => new
-                {
-                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductQuantity = table.Column<int>(type: "int", nullable: false),
-                    ProductPrice = table.Column<double>(type: "float", nullable: false),
-                    BasketID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_basketproduct", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_basketproduct_basket_BasketID",
-                        column: x => x.BasketID,
-                        principalSchema: "dbo",
-                        principalTable: "basket",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_basketproduct_product_ProductID",
-                        column: x => x.ProductID,
-                        principalSchema: "dbo",
-                        principalTable: "product",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "order",
                 schema: "dbo",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderStatus = table.Column<bool>(type: "bit", nullable: false),
-                    BasketID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_order", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_order_basket_BasketID",
-                        column: x => x.BasketID,
-                        principalSchema: "dbo",
-                        principalTable: "basket",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_order_user_UserID",
                         column: x => x.UserID,
@@ -139,42 +77,95 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_basket_UserID",
+            migrationBuilder.CreateTable(
+                name: "shoppingcart",
                 schema: "dbo",
-                table: "basket",
-                column: "UserID");
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_shoppingcart", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_shoppingcart_user_UserID",
+                        column: x => x.UserID,
+                        principalSchema: "dbo",
+                        principalTable: "user",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "cartitem",
+                schema: "dbo",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShoppingCartID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cartitem", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_cartitem_order_ID",
+                        column: x => x.ID,
+                        principalSchema: "dbo",
+                        principalTable: "order",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_cartitem_product_ProductID",
+                        column: x => x.ProductID,
+                        principalSchema: "dbo",
+                        principalTable: "product",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_cartitem_shoppingcart_ShoppingCartID",
+                        column: x => x.ShoppingCartID,
+                        principalSchema: "dbo",
+                        principalTable: "shoppingcart",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_basketproduct_BasketID",
+                name: "IX_cartitem_ProductID",
                 schema: "dbo",
-                table: "basketproduct",
-                column: "BasketID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_basketproduct_ProductID",
-                schema: "dbo",
-                table: "basketproduct",
+                table: "cartitem",
                 column: "ProductID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_order_BasketID",
+                name: "IX_cartitem_ShoppingCartID",
                 schema: "dbo",
-                table: "order",
-                column: "BasketID");
+                table: "cartitem",
+                column: "ShoppingCartID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_order_UserID",
                 schema: "dbo",
                 table: "order",
                 column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_shoppingcart_UserID",
+                schema: "dbo",
+                table: "shoppingcart",
+                column: "UserID",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "basketproduct",
+                name: "cartitem",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
@@ -186,7 +177,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "basket",
+                name: "shoppingcart",
                 schema: "dbo");
 
             migrationBuilder.DropTable(

@@ -13,7 +13,8 @@ namespace ECommerce.Api.Domain.Models
 		public string UserName { get; set; }
 		public string Password { get; set; }
 
-        public virtual ICollection<Basket> Baskets { get; set; }
+        public virtual ShoppingCart ShoppingCart { get; set; }
+
         public virtual ICollection<Order> Orders { get; set; }
 
     }

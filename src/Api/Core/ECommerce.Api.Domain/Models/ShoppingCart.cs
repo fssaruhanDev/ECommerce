@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Api.Domain.Models;
 
-public class Order : BaseEntity
+public class ShoppingCart : BaseEntity
 {
 
     public Guid UserID { get; set; }
     public virtual User User { get; set; }
 
-
     public virtual ICollection<CartItem> CartItems { get; set; }
-
-
-
 }
