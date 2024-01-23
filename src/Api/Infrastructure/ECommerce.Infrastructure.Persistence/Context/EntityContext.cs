@@ -88,6 +88,7 @@ namespace ECommerce.Infrastructure.Persistence.Context
 			{
 				if(entity.CreateDate == DateTime.MinValue)
 					entity.CreateDate = DateTime.Now;
+				entity.ID = Guid.NewGuid();
 
 			}
 

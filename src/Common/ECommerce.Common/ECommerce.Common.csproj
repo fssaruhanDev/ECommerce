@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Events\User\" />
+    <Folder Include="Models\Queries\ShoppingCart\" />
     <Folder Include="Models\RequestModels\Product\" />
   </ItemGroup>
 </Project>

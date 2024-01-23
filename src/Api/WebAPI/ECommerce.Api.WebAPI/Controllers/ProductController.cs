@@ -19,7 +19,7 @@ namespace ECommerce.Api.WebAPI.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("getproducts")]
         public async Task<IActionResult> GetProducts([FromQuery]GetProductsQuery getProductsQuery)
         {
@@ -27,7 +27,7 @@ namespace ECommerce.Api.WebAPI.Controllers
             return Ok(res);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("getproduct")]
         public async Task<IActionResult> GetProduct(Guid productID)
         {

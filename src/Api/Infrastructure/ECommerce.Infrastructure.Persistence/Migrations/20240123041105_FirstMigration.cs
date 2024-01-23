@@ -105,7 +105,8 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ShoppingCartID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ShoppingCartID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -113,12 +114,12 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_cartitem", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_cartitem_order_ID",
-                        column: x => x.ID,
+                        name: "FK_cartitem_order_OrderId",
+                        column: x => x.OrderId,
                         principalSchema: "dbo",
                         principalTable: "order",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_cartitem_product_ProductID",
                         column: x => x.ProductID,
@@ -134,6 +135,12 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_cartitem_OrderId",
+                schema: "dbo",
+                table: "cartitem",
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_cartitem_ProductID",

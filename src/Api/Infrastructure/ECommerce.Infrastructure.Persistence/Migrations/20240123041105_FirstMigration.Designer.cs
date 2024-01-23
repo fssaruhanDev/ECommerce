@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(EntityContext))]
-    [Migration("20240122224352_FirstMigration")]
+    [Migration("20240123041105_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -35,16 +35,21 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ProductID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ShoppingCartID")
+                    b.Property<Guid?>("ShoppingCartID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductID");
 
@@ -186,11 +191,10 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("ECommerce.Api.Domain.Models.CartItem", b =>
                 {
-                    b.HasOne("ECommerce.Api.Domain.Models.Order", null)
+                    b.HasOne("ECommerce.Api.Domain.Models.Order", "Order")
                         .WithMany("CartItems")
-                        .HasForeignKey("ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ECommerce.Api.Domain.Models.Product", "Product")
                         .WithMany("CartItems")
@@ -201,8 +205,9 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.HasOne("ECommerce.Api.Domain.Models.ShoppingCart", "ShoppingCart")
                         .WithMany("CartItems")
                         .HasForeignKey("ShoppingCartID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
 

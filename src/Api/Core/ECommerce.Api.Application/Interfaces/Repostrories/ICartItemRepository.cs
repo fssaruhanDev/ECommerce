@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Api.Application.Interfaces.Repostrories;
 
-public interface IShoppingCartRepository : IGenericRepository<ShoppingCart>
+public interface ICartItemRepository : IGenericRepository<CartItem>
 {
-   Task<ShoppingCart> FindWithIncludesShoppingCart(Guid userID);
 }

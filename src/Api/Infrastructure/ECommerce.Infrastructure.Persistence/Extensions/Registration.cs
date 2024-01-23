@@ -33,6 +33,7 @@ public static class Registration
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
 		services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
+        services.AddScoped<ICartItemRepository, CartItemRepository>();
 
         return services;
 	}

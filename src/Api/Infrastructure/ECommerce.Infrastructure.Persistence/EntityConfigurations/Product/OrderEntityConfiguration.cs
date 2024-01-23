@@ -20,10 +20,13 @@ public class OrderEntityConfiguration : BaseEntityConfiguration<Order>
 
         builder.ToTable("order", EntityContext.DEFAULT_SCHEMA);
 
+
         builder
             .HasMany(o => o.CartItems)
-            .WithOne()
-            .HasForeignKey(ci => ci.ID);
+            .WithOne(ci => ci.Order)
+            .HasForeignKey(ci => ci.OrderId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 
 }
