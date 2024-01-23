@@ -31,4 +31,19 @@ public class ShoppingCartRepository : GenericRepository<ShoppingCart>, IShopping
         return shoppingCart;
     }
 
+    public async Task<ShoppingCart> FindWithIncludesShoppingCartID(Guid shoppingCartID)
+    {
+        IQueryable<ShoppingCart> query = entity;
+        var shoppingCart = query.Include(i => i.User)
+                                .Include(i => i.CartItems)
+                                    .ThenInclude(i => i.Product)
+                                .Include(i => i.CartItems)
+                                    .ThenInclude(i => i.Order)
+                                .FirstOrDefault(x => x.ID == shoppingCartID);
+
+
+        return shoppingCart;
+    }
+
 }
+

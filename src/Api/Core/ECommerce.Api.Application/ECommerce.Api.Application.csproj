@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Features\Commands\Order\" />
     <Folder Include="Features\Commands\Product\" />
   </ItemGroup>
   <ItemGroup>

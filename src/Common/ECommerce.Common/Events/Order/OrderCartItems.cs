@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Common.Events.ShoppingCart.GetShoppingCart;
+namespace ECommerce.Common.Events.Order;
 
-public class CartItems
+public class OrderCartItems
 {
     public Guid Id { get; set; }
     public string Picture { get; set; }
@@ -14,4 +14,5 @@ public class CartItems
     public string Name { get; set; }
     public int Quantity { get; set; }
     public string Size { get; set; }
+    public double TotalPrice { get; set; }
 }

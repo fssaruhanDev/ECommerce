@@ -34,6 +34,7 @@ public static class Registration
         services.AddScoped<IProductRepository, ProductRepository>();
 		services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
         services.AddScoped<ICartItemRepository, CartItemRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
 
         return services;
 	}

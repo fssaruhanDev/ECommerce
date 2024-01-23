@@ -46,6 +46,7 @@ public class GetShoppingCartQueryHandle : IRequestHandler<GetShoppingCartQuery, 
             Name = x.Product.Name,
             Price = x.Product.Price,
             Quantity = x.Quantity,
+            Picture = x.Product.Picture,
             Size = x.Product.Size
 
         }).ToList();

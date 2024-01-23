@@ -14,13 +14,13 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Api.Application.Features.Commands.ShoppingCart;
 
-public class AddCartCommandHanld : IRequestHandler<AddCartCommand, Guid>
+public class AddCartCommandHandle : IRequestHandler<AddCartCommand, Guid>
 {
     private readonly IShoppingCartRepository shoppingCartRepository;
     private readonly ICartItemRepository cartItemRepository;
     private readonly IMapper mapper;
 
-    public AddCartCommandHanld( IShoppingCartRepository shoppingCartRepository, ICartItemRepository cartItemRepository,IMapper mapper)
+    public AddCartCommandHandle( IShoppingCartRepository shoppingCartRepository, ICartItemRepository cartItemRepository,IMapper mapper)
     {
         this.shoppingCartRepository = shoppingCartRepository;
         this.cartItemRepository = cartItemRepository;
