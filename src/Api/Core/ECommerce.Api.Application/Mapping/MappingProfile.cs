@@ -2,6 +2,7 @@
 using AutoMapper;
 using ECommerce.Api.Domain.Models;
 using ECommerce.Common.Events.CartItem;
+using ECommerce.Common.Events.ShoppingCart.GetShoppingCart;
 using ECommerce.Common.Models.Queries;
 using ECommerce.Common.Models.RequestModels;
 
@@ -17,7 +18,8 @@ public class MappingProfile : Profile
 		CreateMap<CartItem, AddCartITemModel>()
 			.ReverseMap();
 
-
+		CreateMap<ShoppingCart,GetShoppingCartViewModel>() 
+			.ReverseMap();
 
 
 

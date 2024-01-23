@@ -12,5 +12,7 @@ public class ShoppingCart : BaseEntity
     public Guid UserID { get; set; }
     public virtual User User { get; set; }
 
+    public bool IsActive { get; set; }
+
     public virtual ICollection<CartItem> CartItems { get; set; }
 }

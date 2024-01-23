@@ -1,4 +1,5 @@
-﻿using ECommerce.Api.Application.Features.Queries.Product.GetProducts;
+﻿using ECommerce.Api.Application.Features.Queries.ShoppingCart;
+using ECommerce.Api.Domain.Models;
 using ECommerce.Common.Models.RequestModels.ShoppingCart;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -21,9 +22,18 @@ namespace ECommerce.Api.WebAPI.Controllers
 
         [HttpPost]
         [Route("addcartproduct")]
-        public async Task<IActionResult> GetProducts([FromBody]AddCartCommand addCartCommand)
+        public async Task<IActionResult> PostAddCart([FromBody]AddCartCommand addCartCommand)
         {
             var res = await madiator.Send(addCartCommand);
+            return Ok(res);
+        }
+
+
+        [HttpGet]
+        [Route("getsoppingcart")]
+        public async Task<IActionResult> GetProducts(Guid userId)
+        {
+            var res = await madiator.Send(new GetShoppingCartQuery(userId));
             return Ok(res);
         }
 

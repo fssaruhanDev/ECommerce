@@ -14,12 +14,10 @@ namespace ECommerce.Api.Application.Features.Queries.Product.GetProduct;
 public class GetProductQueryHandle : IRequestHandler<GetProductQuery, GetProductViewModel>
 {
 
-    private readonly IMapper mapper;
     private readonly IProductRepository productRepository;
 
-    public GetProductQueryHandle(IMapper mapper, IProductRepository productRepository)
+    public GetProductQueryHandle( IProductRepository productRepository)
     {
-        this.mapper = mapper;
         this.productRepository = productRepository;
     }
     public async Task<GetProductViewModel> Handle(GetProductQuery request, CancellationToken cancellationToken)

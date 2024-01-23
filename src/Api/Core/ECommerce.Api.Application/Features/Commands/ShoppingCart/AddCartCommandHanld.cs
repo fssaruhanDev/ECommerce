@@ -69,8 +69,6 @@ public class AddCartCommandHanld : IRequestHandler<AddCartCommand, Guid>
             var cartitem = await cartItemRepository.AddAsync(cartItem);
         }
 
-        var name = shoppingCart.User.FirstName;
-
 
         return shoppingCart.UserID;
     }
