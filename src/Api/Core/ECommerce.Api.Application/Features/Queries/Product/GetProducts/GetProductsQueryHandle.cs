@@ -32,7 +32,9 @@ public class GetProductsQueryHandle : IRequestHandler<GetProductsQuery, List<Get
         {
             ID = i.ID,
             Name = i.Name,
-            Picture = i.Picture
+            Picture = i.Picture,
+            Description = i.Description,
+            Price= i.Price,
         }).ToList();
         return list;
     }

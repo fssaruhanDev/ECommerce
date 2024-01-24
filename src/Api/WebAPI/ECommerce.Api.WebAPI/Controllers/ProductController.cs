@@ -28,7 +28,7 @@ namespace ECommerce.Api.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("getproduct")]
+        [Route("detail")]
         public async Task<IActionResult> GetProduct(Guid productID)
         {
             var res = await madiator.Send(new GetProductQuery(productID));
