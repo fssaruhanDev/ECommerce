@@ -1,5 +1,6 @@
 ﻿using ECommerce.Web.Models.Product;
 using ECommerce.Web.Models.ShoppingCart;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -59,26 +60,32 @@ public class ProductController : Controller
     [Route("detail/{id}")]
     public async Task<IActionResult> Detail(int ProductQuantity, string id)
     {
-
+        string token = HttpContext.Session?.GetString("token") ?? "";
+        if (token == "")
+        {
+            HttpContext.SignOutAsync("CookieAuth");
+            return RedirectToAction("Index", "Login");
+        }
+        
         AddCartViewModel addCart = new AddCartViewModel();
         var userid = HttpContext.Session.GetString("id");
-        var token = HttpContext.Session.GetString("token");
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-        addCart.UserId = Guid.Parse(userid);
-        addCart.ProductId = Guid.Parse(id);
-        addCart.Quantity = ProductQuantity;
+        addCart.userId = Guid.Parse(userid);
+        addCart.productId = Guid.Parse(id);
+        addCart.quantity = ProductQuantity;
+
         var jsonContent = new StringContent(JsonConvert.SerializeObject(addCart), Encoding.UTF8, "application/json");
 
-        HttpResponseMessage response = _httpClient.PostAsync(baseAddress + "/basket/addproduct", jsonContent).Result;
+        HttpResponseMessage response = _httpClient.PostAsync(baseAddress + "/cart/addcartproduct", jsonContent).Result;
 
         if (response.IsSuccessStatusCode)
         {
 
             var data = response.Content.ReadAsStringAsync().Result;
-            var basket = JsonConvert.DeserializeObject<Guid>(data);
-            return View(basket);
+            var shoppingCartId = JsonConvert.DeserializeObject<GetProductViewModel>(data);
+            return View(shoppingCartId);
         }
-       return RedirectToAction("Index");
+       return View();
     }
 
 }

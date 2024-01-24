@@ -2,6 +2,8 @@
 using ECommerce.Api.Application.Interfaces.Repostrories;
 using ECommerce.Api.Domain.Models;
 using ECommerce.Common.Events.CartItem;
+using ECommerce.Common.Events.ShoppingCart.AddShoppingCart;
+using ECommerce.Common.Models.Queries.ShoppingCart;
 using ECommerce.Common.Models.RequestModels.ShoppingCart;
 using ECommerce.Infrastructure.Persistence.Exeptions;
 using MediatR;
@@ -14,62 +16,78 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Api.Application.Features.Commands.ShoppingCart;
 
-public class AddCartCommandHandle : IRequestHandler<AddCartCommand, Guid>
+public class AddCartCommandHandle : IRequestHandler<AddCartCommand, AddCartViewModel>
 {
     private readonly IShoppingCartRepository shoppingCartRepository;
     private readonly ICartItemRepository cartItemRepository;
+    private readonly IOrderRepository orderRepository;
     private readonly IMapper mapper;
 
-    public AddCartCommandHandle( IShoppingCartRepository shoppingCartRepository, ICartItemRepository cartItemRepository,IMapper mapper)
+    public AddCartCommandHandle(IShoppingCartRepository shoppingCartRepository, ICartItemRepository cartItemRepository, IMapper mapper, IOrderRepository orderRepository)
     {
         this.shoppingCartRepository = shoppingCartRepository;
         this.cartItemRepository = cartItemRepository;
         this.mapper = mapper;
+        this.orderRepository = orderRepository;
     }
 
-    public async Task<Guid> Handle(AddCartCommand request, CancellationToken cancellationToken)
+    public async Task<AddCartViewModel> Handle(AddCartCommand request, CancellationToken cancellationToken)
     {
-
-        var shoppingCart = await shoppingCartRepository.FindWithIncludesShoppingCart(request.UserId);
-
+        var dbShoppingCart = await shoppingCartRepository.FindWithIncludesShoppingCart(request.UserId);
 
 
-        if (shoppingCart  is null)
-            throw new DatabaseValidationException("Shopping Cart was null");
 
-
-        var existCartItem = shoppingCart.CartItems.FirstOrDefault(i=>i.ProductID == request.ProductId);
-
-        if (existCartItem is not null)
+        if (dbShoppingCart is null)
         {
-            AddCartITemModel model = new AddCartITemModel()
+
+            dbShoppingCart = new Domain.Models.ShoppingCart
             {
-                ProductId = request.ProductId,
-                Quantity = existCartItem.Quantity +  request.Quantity,
-                OrderID = existCartItem.Order.ID,
-                ShoppingCartId = shoppingCart.ID
+                UserID = request.UserId,
+
             };
+            await shoppingCartRepository.AddAsync(dbShoppingCart);
+        }
 
-            mapper.Map(model,existCartItem);
+        var existingCartItem = dbShoppingCart.CartItems.FirstOrDefault(i => i.ProductID == request.ProductId);
 
-            var cartitem = await cartItemRepository.UpdateAsync(existCartItem);
+        if (existingCartItem is not null)
+        {
+            existingCartItem.Quantity += request.Quantity;
+            await cartItemRepository.UpdateAsync(existingCartItem);
         }
         else
         {
-            AddCartITemModel model = new AddCartITemModel()
+            var addCartOrder = new AddCartOrder { UserID = request.UserId };
+            var orderItem = mapper.Map<Order>(addCartOrder);
+            await orderRepository.AddAsync(orderItem);
+
+            var order = orderRepository.AsQueryable();
+
+            var dbOrder = await order.Where(x => x.UserID == request.UserId)
+                         .OrderByDescending(x => x.CreateDate)
+                         .FirstOrDefaultAsync();
+
+            var newCartItemModel = new AddCartITemModel
             {
                 ProductId = request.ProductId,
                 Quantity = request.Quantity,
-                OrderID = Guid.Parse("386e8dd8-da6a-4225-bc8f-2a48d9ded8da"),
-                ShoppingCartId = shoppingCart.ID
+                OrderID = dbOrder.ID,
+                ShoppingCartId = dbShoppingCart.ID
             };
 
-            var cartItem = mapper.Map<CartItem>(model);
-
-            var cartitem = await cartItemRepository.AddAsync(cartItem);
+            var newCartItem = mapper.Map<CartItem>(newCartItemModel);
+            await cartItemRepository.AddAsync(newCartItem);
         }
 
+        var product = cartItemRepository.AsQueryable();
 
-        return shoppingCart.UserID;
+
+        var returnModel = existingCartItem != null
+            ? mapper.Map<AddCartViewModel>(existingCartItem.Product)
+            : mapper.Map<AddCartViewModel>(product.Include(i=>i.Product).FirstOrDefaultAsync(x => x.ProductID == request.ProductId).GetAwaiter().GetResult().Product);
+
+        return returnModel;
+    
+
     }
 }

@@ -25,7 +25,7 @@ public class ShoppingCartRepository : GenericRepository<ShoppingCart>, IShopping
                                     .ThenInclude(i => i.Product)
                                 .Include(i => i.CartItems)
                                     .ThenInclude(i => i.Order)
-                                .FirstOrDefault(x => x.UserID == userID);
+                                .FirstOrDefault(x => x.UserID == userID );
 
 
         return shoppingCart;

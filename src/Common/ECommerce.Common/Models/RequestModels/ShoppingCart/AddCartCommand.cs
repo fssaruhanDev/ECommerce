@@ -1,4 +1,5 @@
 ﻿
+using ECommerce.Common.Models.Queries.ShoppingCart;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Common.Models.RequestModels.ShoppingCart;
 
-public class AddCartCommand : IRequest<Guid>
+public class AddCartCommand : IRequest<AddCartViewModel>
 {
     public Guid UserId { get; set; }
     public Guid ProductId { get; set; }

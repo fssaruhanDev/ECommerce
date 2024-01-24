@@ -56,7 +56,8 @@ public class GetShoppingCartQueryHandle : IRequestHandler<GetShoppingCartQuery, 
 
         var totalPrice = 0.0;
 
-
+        //Total Price her defasında hesaplanıyor çünkü eğer ürünün fiyatı değişirse ve sepette eski fiyatta kalırsa
+        //karışıklık yaşanabilir.
         for (int i = 0; i < itemList.Count; i++)
         {
             totalPrice += itemList[i].Price * itemList[i].Quantity;

@@ -12,7 +12,11 @@ namespace ECommerce.Infrastructure.Persistence.Repostory;
 
 public class OrderRepository : GenericRepository<Order>, IOrderRepository
 {
+    private readonly DbContext _dbContext;
     public OrderRepository(EntityContext dbContext) : base(dbContext)
     {
+        _dbContext = dbContext;
     }
+
+
 }

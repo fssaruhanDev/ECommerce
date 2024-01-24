@@ -9,4 +9,5 @@ namespace ECommerce.Api.Application.Interfaces.Repostrories;
 
 public interface IOrderRepository : IGenericRepository<Order>
 {
+    
 }
