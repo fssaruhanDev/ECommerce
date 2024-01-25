@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(EntityContext))]
-    [Migration("20240125030655_firstMigrationTest5")]
-    partial class firstMigrationTest5
+    [Migration("20240125070015_testConfigurationsettings")]
+    partial class testConfigurationsettings
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ShoppingCartID")
+                    b.Property<Guid?>("ShoppingCartID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -208,8 +208,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.HasOne("ECommerce.Api.Domain.Models.ShoppingCart", "ShoppingCart")
                         .WithMany("CartItems")
                         .HasForeignKey("ShoppingCartID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Order");
 
