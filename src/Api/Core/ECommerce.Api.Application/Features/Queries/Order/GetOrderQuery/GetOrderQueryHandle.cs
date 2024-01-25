@@ -37,7 +37,7 @@ public class GetOrderQueryHandle : IRequestHandler<GetOrderQuery, List<GetOrders
                      .Include(i => i.CartItems)
                         .ThenInclude(i => i.ShoppingCart);
 
-        var orders = order.Where(x => x.UserID == request.UserID);
+        var orders = order.Where(x => x.CartItems.Any(ci => ci.ShoppingCart.IsActive == false) && x.UserID == request.UserID);
 
 
 
