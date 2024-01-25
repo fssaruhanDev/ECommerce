@@ -28,9 +28,7 @@ public class GetBuyShoppingCartCommandHandle : IRequestHandler<GetBuyShoppingCar
     {
         var shoppingCart = await shoppingCartRepository.GetByIdAsync(request.shoppingCartId);
         /// Satın alma kontrolleri yapılıp satın alma işleminin yapıldığından emin olduktan sonra.
-        shoppingCart.IsActive = false;
-  
-        await shoppingCartRepository.UpdateAsync(shoppingCart);
+        await shoppingCartRepository.DeleteAsync(shoppingCart);
 
         return shoppingCart.ID;
     }

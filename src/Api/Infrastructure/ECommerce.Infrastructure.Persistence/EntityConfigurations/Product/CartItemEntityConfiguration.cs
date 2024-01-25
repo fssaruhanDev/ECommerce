@@ -30,7 +30,6 @@ public class CartItemEntityConfiguration : BaseEntityConfiguration<CartItem>
             .HasOne(ci => ci.ShoppingCart)
             .WithMany(sc => sc.CartItems)
             .HasForeignKey(ci => ci.ShoppingCartID)
-            .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(ci => ci.Order)

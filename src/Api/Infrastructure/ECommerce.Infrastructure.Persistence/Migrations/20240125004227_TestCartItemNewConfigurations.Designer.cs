@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(EntityContext))]
-    [Migration("20240123055812_ShoppingCartIsActiveUpdate")]
-    partial class ShoppingCartIsActiveUpdate
+    [Migration("20240125004227_TestCartItemNewConfigurations")]
+    partial class TestCartItemNewConfigurations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -207,8 +207,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
 
                     b.HasOne("ECommerce.Api.Domain.Models.ShoppingCart", "ShoppingCart")
                         .WithMany("CartItems")
-                        .HasForeignKey("ShoppingCartID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ShoppingCartID");
 
                     b.Navigation("Order");
 

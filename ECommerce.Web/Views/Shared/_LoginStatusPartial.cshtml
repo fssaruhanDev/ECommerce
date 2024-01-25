@@ -1,8 +1,8 @@
 ﻿
 @if (User == null || User.Identity == null || User.Identity.IsAuthenticated)
 {
-    <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="Index">Siparişlerim</a>
-    <a class="nav-link text-dark" asp-controller="Basket" asp-action="Index">Sepet</a>
+    <a class="nav-link text-dark" asp-controller="order" asp-action="Index">Siparişlerim</a>
+    <a class="nav-link text-dark" asp-controller="cart" asp-action="Index">Sepet</a>
     <a class="nav-link text-dark" asp-controller="Login" asp-action="Logout">Çıkış</a>
 }
 else

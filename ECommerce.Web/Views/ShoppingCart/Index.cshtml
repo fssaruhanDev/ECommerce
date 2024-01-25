@@ -3,3 +3,74 @@
 *@
 @{
 }
+@model GetShoppingCartViewModel 
+<div class="container-fluid">
+    <div class="row">
+        <aside class="col-lg-9">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-borderless table-shopping-cart">
+
+                        @if (@Model.Items == null)
+                        {
+                            <h6>Sepetinizde ürün bulunmamaktadır</h6>
+
+                        }
+                        else
+                        {
+                            <thead class="text-muted">
+                                <tr class="small text-uppercase">
+                                    <th scope="col">Ürün</th>
+                                    <th scope="col" width="120">Adet</th>
+                                    <th scope="col" width="120">Fiyat</th>
+                                    <th scope="col" class="text-right d-none d-md-block" width="200"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+
+                                @foreach (var item in @Model.Items)
+                                {
+                                    <tr>
+                                        <td>
+                                            <figure class="itemside align-items-center">
+                                                <div class="aside"><img src="/img/product.png" class="img-sm"></div>
+                                                <figcaption class="info">
+                                                    <a href="#" class="title text-dark" data-abc="true">@item.Name</a>
+                                                    <p class="text-muted small">SIZE: @item.Size <br> Satıcı: @item.Name</p>
+                                                </figcaption>
+                                            </figure>
+                                        </td>
+                                        <td>
+                                            <label>@item.Quantity </label>
+                                        </td>
+                                        <td>
+                                            <div class="price-wrap"> <var class="price">@item.Price ₺</var> </div>
+                                        </td>
+                                        <td class="text-right d-none d-md-block"> <a href="" class="btn btn-light" data-abc="true"> Sil</a> </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                    </table>
+                </div>
+            </div>
+        </aside>
+        <aside class="col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <dl class="dlist-align">
+                        <dt>Total price : </dt>
+                        <dd class="text-right ml-3"><b> @Model.TotalPrice ₺</b> </dd>
+                    </dl>
+                    <form asp-action="Buy" method="post">
+                        <input type="hidden" name="shoppingCartId" value="@Model.Id" />
+                        <hr>
+                        <button type="submit" class="btn btn-out btn-primary btn-square btn-main"> Satın Al</button>
+                    </form>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>

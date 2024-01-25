@@ -34,7 +34,7 @@ public class GetShoppingCartQueryHandle : IRequestHandler<GetShoppingCartQuery, 
 
         query = query.Include(i => i.CartItems).ThenInclude(i => i.Product);
 
-        var shoppingCart = await query.FirstOrDefaultAsync(x => x.UserID == request.UserId && x.IsActive == true);
+        var shoppingCart = await query.FirstOrDefaultAsync(x => x.UserID == request.UserId);
 
         if (shoppingCart is null)
             throw new DatabaseValidationException("Shopping Card Was Not Found");
@@ -64,6 +64,7 @@ public class GetShoppingCartQueryHandle : IRequestHandler<GetShoppingCartQuery, 
         }
 
         result.TotalPrice = totalPrice;
+        result.Id = shoppingCart.ID;
 
 
         return result;

@@ -40,9 +40,9 @@ namespace ECommerce.Api.WebAPI.Controllers
 
         [HttpGet]
         [Route("buy")]
-        public async Task<IActionResult> GetBut(Guid shoppingCartID)
+        public async Task<IActionResult> GetBut(Guid shoppingCartId)
         {
-            var res = await madiator.Send(new GetBuyShoppingCartCommand(shoppingCartID));
+            var res = await madiator.Send(new GetBuyShoppingCartCommand(shoppingCartId));
             return Ok(res);
         }
 
