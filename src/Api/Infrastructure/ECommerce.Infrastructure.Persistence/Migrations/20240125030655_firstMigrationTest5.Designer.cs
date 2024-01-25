@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(EntityContext))]
-    [Migration("20240125005257_TestCartItemNewConfigurations2")]
-    partial class TestCartItemNewConfigurations2
+    [Migration("20240125030655_firstMigrationTest5")]
+    partial class firstMigrationTest5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ShoppingCartID")
+                    b.Property<Guid>("ShoppingCartID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -197,7 +197,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.HasOne("ECommerce.Api.Domain.Models.Order", "Order")
                         .WithMany("CartItems")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ECommerce.Api.Domain.Models.Product", "Product")
                         .WithMany("CartItems")
@@ -208,7 +208,8 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                     b.HasOne("ECommerce.Api.Domain.Models.ShoppingCart", "ShoppingCart")
                         .WithMany("CartItems")
                         .HasForeignKey("ShoppingCartID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Order");
 

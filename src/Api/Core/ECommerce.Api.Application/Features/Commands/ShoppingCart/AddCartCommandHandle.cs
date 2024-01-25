@@ -35,7 +35,7 @@ public class AddCartCommandHandle : IRequestHandler<AddCartCommand, AddCartViewM
     {
         var dbShoppingCart = await shoppingCartRepository.FindWithIncludesShoppingCart(request.UserId);
 
-
+        
 
         if (dbShoppingCart is null)
         {

@@ -36,7 +36,7 @@ public class CartItemEntityConfiguration : BaseEntityConfiguration<CartItem>
             .WithMany(o => o.CartItems)
             .HasForeignKey(ci => ci.OrderId)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Restrict);
 
 
     }

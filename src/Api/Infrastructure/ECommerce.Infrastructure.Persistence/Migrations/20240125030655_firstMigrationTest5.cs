@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ECommerce.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class TestCartItemNewConfigurations : Migration
+    public partial class firstMigrationTest5 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -106,7 +106,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ShoppingCartID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ShoppingCartID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -120,7 +120,7 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         principalSchema: "dbo",
                         principalTable: "order",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_cartitem_product_ProductID",
                         column: x => x.ProductID,
@@ -133,7 +133,8 @@ namespace ECommerce.Infrastructure.Persistence.Migrations
                         column: x => x.ShoppingCartID,
                         principalSchema: "dbo",
                         principalTable: "shoppingcart",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

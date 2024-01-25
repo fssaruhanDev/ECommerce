@@ -2,6 +2,7 @@
 using ECommerce.Api.Domain.Models;
 using ECommerce.Common.Models.RequestModels.ShoppingCart;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace ECommerce.Api.WebAPI.Controllers
 {
     [Route("api/cart")]
     [ApiController]
+    [Authorize]
     public class ShoppingCartController : ControllerBase
     {
 

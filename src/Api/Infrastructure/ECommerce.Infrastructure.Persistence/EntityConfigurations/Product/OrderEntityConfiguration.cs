@@ -26,7 +26,7 @@ public class OrderEntityConfiguration : BaseEntityConfiguration<Order>
             .WithOne(ci => ci.Order)
             .HasForeignKey(ci => ci.OrderId)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 
 }

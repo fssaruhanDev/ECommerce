@@ -48,7 +48,6 @@ public class ShoppingCartController : Controller
     [Route("buy")]
     public IActionResult Buy(Guid shoppingCartId)
     {
-        var cartID = Guid.Parse( Request.Form["shoppingCartId"]);
         string token = HttpContext.Session?.GetString("token") ?? "";
         if (token == "")
         {
@@ -56,7 +55,7 @@ public class ShoppingCartController : Controller
             return RedirectToAction("Index", "Login");
         }
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-        HttpResponseMessage response = _httpClient.GetAsync(baseAddress + "/cart/buy?shoppingCartId=" + cartID).Result;
+        HttpResponseMessage response = _httpClient.GetAsync(baseAddress + "/cart/buy?shoppingCartId=" + shoppingCartId).Result;
 
 
         GetShoppingCartViewModel Cart = new GetShoppingCartViewModel();

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Api.Application.Features.Queries.Order.GetOrderQuery;
 
-public class GetOrderQuery : IRequest<IQueryable<GetOrdersViewModel>>
+public class GetOrderQuery : IRequest<List<GetOrdersViewModel>>
 {
     public Guid UserID { get; set; }
 

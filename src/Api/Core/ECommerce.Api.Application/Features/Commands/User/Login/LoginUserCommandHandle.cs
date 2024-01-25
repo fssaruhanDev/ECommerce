@@ -65,12 +65,14 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUs
     }
 
     private string GenerateToken(Claim[] claims)
-    { 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthConfig:Secret"]));
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"]));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var expiry = DateTime.Now.AddDays(10);
         var token = new JwtSecurityToken(claims: claims,
                                         expires: expiry,
+                                        issuer: configuration["Token:Issuer"],
+                                        audience: configuration["Token:Audience"],
                                         signingCredentials: creds,
                                         notBefore: DateTime.Now);
 

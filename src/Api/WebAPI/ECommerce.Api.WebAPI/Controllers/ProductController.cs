@@ -2,6 +2,7 @@
 using ECommerce.Api.Application.Features.Queries.Product.GetProducts;
 using ECommerce.Common.Models.RequestModels;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

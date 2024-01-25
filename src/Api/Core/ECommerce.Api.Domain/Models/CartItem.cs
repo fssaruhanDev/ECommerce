@@ -11,7 +11,7 @@ public class CartItem : BaseEntity
     public Guid ProductID { get; set; }
     public virtual Product Product { get; set; }
 
-    public Guid? ShoppingCartID { get; set; }
+    public Guid ShoppingCartID { get; set; }
     public virtual ShoppingCart ShoppingCart { get; set; }
 
     public Guid? OrderId { get; set; } 

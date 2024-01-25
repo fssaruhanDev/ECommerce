@@ -22,8 +22,6 @@ public class ProductController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        var token = HttpContext.Session.GetString("token");
-        _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
         HttpResponseMessage response = _httpClient.GetAsync(baseAddress + "/product/getproducts").Result;
 
         List<GetProductsViewModel> productList = new();
@@ -41,8 +39,6 @@ public class ProductController : Controller
     [Route("detail/{id}")]
     public IActionResult Detail(string id)
     {
-        var token = HttpContext.Session.GetString("token");
-        _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
         HttpResponseMessage response = _httpClient.GetAsync(baseAddress + "/product/detail?productID=" + id).Result;
 
         GetProductViewModel product = new();

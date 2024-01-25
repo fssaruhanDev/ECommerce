@@ -1,15 +1,7 @@
-﻿using MediatR.Pipeline;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ECommerce.Common.Events.Order;
+﻿namespace ECommerce.Web.Models.Order;
 
 public class OrderCartItems
 {
-
     public Guid Id { get; set; }
     public Guid OrderID { get; set; }
     public string Picture { get; set; }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Api.Application.Features.Queries.Order.GetOrderQuery;
 
-public class GetOrderQueryHandle : IRequestHandler<GetOrderQuery, IQueryable< GetOrdersViewModel>>
+public class GetOrderQueryHandle : IRequestHandler<GetOrderQuery, List<GetOrdersViewModel>>
 {
 
     private readonly IOrderRepository orderRepository;
@@ -24,14 +24,14 @@ public class GetOrderQueryHandle : IRequestHandler<GetOrderQuery, IQueryable< Ge
 
     public IShoppingCartRepository ShoppingCartRepository => shoppingCartRepository;
 
-    public async Task<IQueryable< GetOrdersViewModel>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
+    public async Task<List<GetOrdersViewModel>> Handle(GetOrderQuery request, CancellationToken cancellationToken)
     {
         var order = orderRepository.AsQueryable();
         var shoppingCart = shoppingCartRepository.AsQueryable();
 
 
         order = order.Include(i => i.User)
-                     .Include(i=>i.CartItems)
+                     .Include(i => i.CartItems)
                      .Include(i => i.CartItems)
                         .ThenInclude(i => i.Product)
                      .Include(i => i.CartItems)
@@ -39,22 +39,41 @@ public class GetOrderQueryHandle : IRequestHandler<GetOrderQuery, IQueryable< Ge
 
         var orders = order.Where(x => x.UserID == request.UserID);
 
-        var dbOrder = orders.Select(i=> new GetOrdersViewModel()
+
+
+        var groupedOrders = orders.GroupBy(i => i.CartItems.FirstOrDefault().ShoppingCartID)
+                           .Select(group => new GetOrdersViewModel
+                           {
+                               ShoppingCartID = group.Key,
+                               Items = group.SelectMany(i => i.CartItems)
+                                           .Select(x => new OrderCartItems
+                                           {
+                                               Id = x.ID,
+                                               Name = x.Product.Name,
+                                               Picture = x.Product.Picture,
+                                               Price = x.Product.Price,
+                                               Quantity = x.Quantity,
+                                               OrderID = x.Order.ID,
+                                               Size = x.Product.Size,
+                                               TotalPrice = x.Quantity * x.Product.Price
+                                           })
+                                           .ToList()
+
+                           }).ToList();
+
+        var totalPrice = 0.00;
+        foreach (var group in groupedOrders)
         {
-            OrderId = i.ID,
-            Items = i.CartItems.Select(x => new OrderCartItems()
-                                        {
-                                            Id = x.ID,
-                                            Name = x.Product.Name,
-                                            Picture = x.Product.Picture,
-                                            Price = x.Product.Price,
-                                            Quantity = x.Quantity,
-                                            Size = x.Product.Size,
-                                            TotalPrice = x.Quantity * x.Product.Price
-                                        }).ToList(),
-        });
+            foreach (var item in group.Items)
+            {
+                totalPrice += item.TotalPrice;
+            }
+
+            group.TotalPrice = totalPrice;
+
+        }
 
 
-        return  dbOrder;
+        return groupedOrders;
     }
 }
