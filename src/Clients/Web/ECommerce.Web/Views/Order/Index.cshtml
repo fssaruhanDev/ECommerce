@@ -1,0 +1,68 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<GetOrdersViewModel>
+<div class="container-fluid">
+    <div class="row">
+        <aside class="col-lg-9">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-borderless table-shopping-cart">
+
+                        @if (@Model == null)
+                        {
+                            <h6>Geçmiş siparişiniz bulunmamakta</h6>
+
+                        }
+                        else
+                        {
+                            @foreach (var order in Model)
+                            {
+                                <thead class="text-muted">
+                                    <h3> @order.ShoppingCartID Nolu sipariş</h3>
+
+                                    <tr class="small text-uppercase">
+                                        <th scope="col">Ürün</th>
+                                        <th scope="col" width="120">Adet</th>
+                                        <th scope="col" width="120">Fiyat</th>
+                                        <th scope="col" class="text-right d-none d-md-block" width="200"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+
+                                    @foreach (var item in order.Items)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <figure class="itemside align-items-center">
+                                                    <div class="aside"><img src="/img/product.png" class="img-sm"></div>
+                                                    <figcaption class="info">
+                                                        <a href="#" class="title text-dark" data-abc="true">@item.Name</a>
+                                                        <p class="text-muted small">SIZE: @item.Size <br> Satıcı: @item.Name</p>
+                                                    </figcaption>
+                                                </figure>
+                                            </td>
+                                            <td>
+                                                <label>@item.Quantity </label>
+                                            </td>
+                                            <td>
+                                                <div class="price-wrap"> <var class="price">@item.TotalPrice ₺</var> </div>
+                                            </td>
+                                            <td class="text-right d-none d-md-block"> <a href="" class="btn btn-light" data-abc="true"> İptal Et</a> </td>
+                                        </tr>
+                                    }
+
+                                    <h5>Sepet Tutarı : @order.TotalPrice</h5>
+                                </tbody>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>

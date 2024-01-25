@@ -1,0 +1,11 @@
+﻿
+@if (User == null || User.Identity == null || User.Identity.IsAuthenticated)
+{
+    <a class="nav-link text-dark" asp-controller="order" asp-action="Index">Siparişlerim</a>
+    <a class="nav-link text-dark" asp-controller="cart" asp-action="Index">Sepet</a>
+    <a class="nav-link text-dark" asp-controller="Login" asp-action="Logout">Çıkış</a>
+}
+else
+{
+    <a class="nav-link text-dark" asp-controller="Login" asp-action="Index">Login</a>
+}
