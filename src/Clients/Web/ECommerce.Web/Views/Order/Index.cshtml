@@ -9,33 +9,30 @@
         <aside class="col-lg-9">
             <div class="card">
                 <div class="table-responsive">
-                    <table class="table table-borderless table-shopping-cart">
+                    @if (@Model == null)
+                    {
+                        <h6>Geçmiş siparişiniz bulunmamakta</h6>
 
-                        @if (@Model == null)
-                        {
-                            <h6>Geçmiş siparişiniz bulunmamakta</h6>
-
-                        }
-                        else
-                        {
-                            @foreach (var order in Model)
+                    }
+                    else
+                    {
+                        @foreach (var order in Model)
+                        { @foreach (var item in order.Items)
                             {
-                                <thead class="text-muted">
-                                    <h3> @order.ShoppingCartID Nolu sipariş</h3>
+                                <table class="table table-borderless table-shopping-cart">
+                                    <div><h3> @order.ShoppingCartID Nolu sipariş</h3></div>
+                                    <thead class="text">
+                                        <tr class="small text-uppercase">
+                                            <th scope="col">Ürün</th>
+                                            <th scope="col" width="120">Adet</th>
+                                            <th scope="col" width="120">Fiyat</th>
+                                            <th scope="col" class="text-right d-none d-md-block" width="200">iptal</th>
 
-                                    <tr class="small text-uppercase">
-                                        <th scope="col">Ürün</th>
-                                        <th scope="col" width="120">Adet</th>
-                                        <th scope="col" width="120">Fiyat</th>
-                                        <th scope="col" class="text-right d-none d-md-block" width="200"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                        </tr>
+                                    </thead>
 
+                                    <tbody>
 
-
-                                    @foreach (var item in order.Items)
-                                    {
                                         <tr>
                                             <td>
                                                 <figure class="itemside align-items-center">
@@ -54,13 +51,21 @@
                                             </td>
                                             <td class="text-right d-none d-md-block"> <a href="" class="btn btn-light" data-abc="true"> İptal Et</a> </td>
                                         </tr>
-                                    }
 
-                                    <h5>Sepet Tutarı : @order.TotalPrice</h5>
-                                </tbody>
+
+
+                                    </tbody>
+
+
+                                    <div class="h1"><h5>Sepet Tutarı : @order.TotalPrice</h5></div>
+                                </table>
+
+                                <hr />
                             }
                         }
-                    </table>
+
+
+                    }
                 </div>
             </div>
         </aside>
