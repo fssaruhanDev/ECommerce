@@ -84,23 +84,25 @@ public class ShoppingCartController : Controller
 
     }
 
-    [HttpPost]
-    [Route("upquantity")]
-    public async Task<IActionResult> PostUpdateQuantity(Guid shoppingCartId)
+    #region updateQuantity Test
+    //[HttpPost]
+    //[Route("upquantity")]
+    //public async Task<IActionResult> PostUpdateQuantity(Guid shoppingCartId)
 
-    {
-        string token = HttpContext.Session?.GetString("token") ?? "";
-        if (token == "")
-        {
-            HttpContext.SignOutAsync("CookieAuth");
-            return RedirectToAction("Index", "Login");
-        }
-        _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-        await _httpClient.GetAsync(baseAddress + "/cart/upquantity?shoppingCartId=" + shoppingCartId);
-
-
-        return RedirectToAction("Index", "cart");
+    //{
+    //    string token = HttpContext.Session?.GetString("token") ?? "";
+    //    if (token == "")
+    //    {
+    //        HttpContext.SignOutAsync("CookieAuth");
+    //        return RedirectToAction("Index", "Login");
+    //    }
+    //    _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+    //    await _httpClient.GetAsync(baseAddress + "/cart/upquantity?shoppingCartId=" + shoppingCartId);
 
 
-    }
+    //    return RedirectToAction("Index", "cart");
+
+
+    //}
+    #endregion
 }

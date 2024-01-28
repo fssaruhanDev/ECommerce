@@ -46,6 +46,7 @@ public class AddCartCommandHandle : IRequestHandler<AddCartCommand, AddCartViewM
 
             };
             await shoppingCartRepository.AddAsync(dbShoppingCart);
+            dbShoppingCart = await shoppingCartRepository.FindWithIncludesShoppingCart(request.UserId);
         }
 
         var existingCartItem = dbShoppingCart.CartItems.FirstOrDefault(i => i.ProductID == request.ProductId);

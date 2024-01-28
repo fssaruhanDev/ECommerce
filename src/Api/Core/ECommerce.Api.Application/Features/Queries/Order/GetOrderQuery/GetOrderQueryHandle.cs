@@ -78,6 +78,9 @@ public class GetOrderQueryHandle : IRequestHandler<GetOrderQuery, List<GetOrders
             group.TotalPrice = totalPrice;
 
         }
+
+        groupedOrders.AsQueryable();
+        groupedOrders.Remove(groupedOrders.FirstOrDefault(x=>x.Items.Count ==0));
         return groupedOrders;
 
       

@@ -17,20 +17,20 @@
                     else
                     {
                         @foreach (var order in Model)
-                        { @foreach (var item in order.Items)
-                            {
-                                <table class="table table-borderless table-shopping-cart">
-                                    <div><h3> @order.ShoppingCartID Nolu sipariş</h3></div>
-                                    <thead class="text">
-                                        <tr class="small text-uppercase">
-                                            <th scope="col">Ürün</th>
-                                            <th scope="col" width="120">Adet</th>
-                                            <th scope="col" width="120">Fiyat</th>
-                                            <th scope="col" class="text-right d-none d-md-block" width="200">iptal</th>
+                        {
+                            <table class="table table-borderless table-shopping-cart">
+                                <div><h3> @order.ShoppingCartID Nolu sipariş</h3></div>
+                                <thead class="text">
+                                    <tr class="small text-uppercase">
+                                        <th scope="col">Ürün</th>
+                                        <th scope="col" width="120">Adet</th>
+                                        <th scope="col" width="120">Fiyat</th>
+                                        <th scope="col" class="text-right d-none d-md-block" width="200">iptal</th>
 
-                                        </tr>
-                                    </thead>
-
+                                    </tr>
+                                </thead>
+                                @foreach (var item in order.Items)
+                                {
                                     <tbody>
 
                                         <tr>
@@ -55,13 +55,13 @@
 
 
                                     </tbody>
+                                }
 
+                                <div class="h1"><h5>Sepet Tutarı : @order.TotalPrice</h5></div>
+                            </table>
 
-                                    <div class="h1"><h5>Sepet Tutarı : @order.TotalPrice</h5></div>
-                                </table>
+                            <hr />
 
-                                <hr />
-                            }
                         }
 
                     }
