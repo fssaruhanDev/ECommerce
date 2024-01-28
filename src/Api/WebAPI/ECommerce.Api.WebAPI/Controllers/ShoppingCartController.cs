@@ -1,6 +1,7 @@
 ﻿using ECommerce.Api.Application.Features.Queries.ShoppingCart;
 using ECommerce.Api.Domain.Models;
 using ECommerce.Common.Models.RequestModels.ShoppingCart;
+using ECommerce.Common.Models.RequestModels.ShoppingCart.CartItemDelete;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -42,9 +43,17 @@ namespace ECommerce.Api.WebAPI.Controllers
 
         [HttpGet]
         [Route("buy")]
-        public async Task<IActionResult> GetBut(Guid shoppingCartId)
+        public async Task<IActionResult> GetBuy(Guid shoppingCartId)
         {
             var res = await madiator.Send(new GetBuyShoppingCartCommand(shoppingCartId));
+            return Ok(res);
+        }
+
+        [HttpGet]
+        [Route("delete")]
+        public async Task<IActionResult> GetDelete(Guid cartItemId)
+        {
+            var res = await madiator.Send(new CartItemDeleteCommand(cartItemId));
             return Ok(res);
         }
 

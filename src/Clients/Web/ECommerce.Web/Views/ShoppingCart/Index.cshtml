@@ -3,7 +3,7 @@
 *@
 @{
 }
-@model GetShoppingCartViewModel 
+@model GetShoppingCartViewModel
 <div class="container-fluid">
     <div class="row">
         <aside class="col-lg-9">
@@ -43,12 +43,20 @@
                                             </figure>
                                         </td>
                                         <td>
-                                            <label>@item.Quantity </label>
+                                            <form asp-action="GetUpdateQuantity" method="post">
+                                                <label>@item.Quantity </label>
+                                            </form>
                                         </td>
                                         <td>
                                             <div class="price-wrap"> <var class="price">@item.Price ₺</var> </div>
                                         </td>
-                                        <td class="text-right d-none d-md-block"> <a href="" class="btn btn-light" data-abc="true"> Sil</a> </td>
+
+                                        <td class="text-right d-none d-md-block">
+                                            <form asp-action="PostDelete" method="post">
+                                                <input type="hidden" name="shoppingCartId" value="@item.Id" />
+                                                <button type="submit" class="btn btn-light" data-abc="true"> Sil</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -64,7 +72,7 @@
                         <dt>Total price : </dt>
                         <dd class="text-right ml-3"><b> @Model.TotalPrice ₺</b> </dd>
                     </dl>
-                    <form asp-action="Buy" method="post">
+                    <form asp-action="PostBuy" method="post">
                         <input type="hidden" name="shoppingCartId" value="@Model.Id" />
                         <hr>
                         <button type="submit" class="btn btn-out btn-primary btn-square btn-main"> Satın Al</button>

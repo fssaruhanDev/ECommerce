@@ -46,7 +46,7 @@ public class ShoppingCartController : Controller
 
     [HttpPost]
     [Route("buy")]
-    public IActionResult Buy(Guid shoppingCartId)
+    public async Task<IActionResult> PostBuy(Guid shoppingCartId)
     {
         string token = HttpContext.Session?.GetString("token") ?? "";
         if (token == "")
@@ -58,7 +58,46 @@ public class ShoppingCartController : Controller
         HttpResponseMessage response = _httpClient.GetAsync(baseAddress + "/cart/buy?shoppingCartId=" + shoppingCartId).Result;
 
 
-        GetShoppingCartViewModel Cart = new GetShoppingCartViewModel();
+
+        return RedirectToAction("Index", "cart");
+
+
+    }
+
+    [HttpPost]
+    [Route("getDelete")]
+    public async Task<IActionResult> PostDelete(Guid cartItemId)
+
+    {
+        string token = HttpContext.Session?.GetString("token") ?? "";
+        if (token == "")
+        {
+            HttpContext.SignOutAsync("CookieAuth");
+            return RedirectToAction("Index", "Login");
+        }
+        _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+        await _httpClient.GetAsync(baseAddress + "/cart/delete?cartItemId=" + cartItemId);
+
+
+        return RedirectToAction("Index", "cart");
+
+
+    }
+
+    [HttpPost]
+    [Route("upquantity")]
+    public async Task<IActionResult> PostUpdateQuantity(Guid shoppingCartId)
+
+    {
+        string token = HttpContext.Session?.GetString("token") ?? "";
+        if (token == "")
+        {
+            HttpContext.SignOutAsync("CookieAuth");
+            return RedirectToAction("Index", "Login");
+        }
+        _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+        await _httpClient.GetAsync(baseAddress + "/cart/upquantity?shoppingCartId=" + shoppingCartId);
+
 
         return RedirectToAction("Index", "cart");
 
