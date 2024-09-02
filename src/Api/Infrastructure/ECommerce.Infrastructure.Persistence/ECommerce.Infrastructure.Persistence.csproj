@@ -16,9 +16,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Common\ECommerce.Common\ECommerce.Common.csproj" />
-    <ProjectReference Include="..\..\Core\ECommerce.Api.Application\ECommerce.Api.Application.csproj" />
-    <ProjectReference Include="..\..\Core\ECommerce.Api.Domain\ECommerce.Api.Domain.csproj" />
+   
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
